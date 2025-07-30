@@ -90,7 +90,7 @@ position = Vector2(535, -209)
 position = Vector2(-163, -206)
 
 [node name="wall6" parent="Walls" instance=ExtResource("3_lnu2h")]
-position = Vector2(-26, -183)
+position = Vector2(-56, -134)
 
 [node name="Blocks" type="Node" parent="."]
 
