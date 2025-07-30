@@ -13,8 +13,8 @@ enum directions {LEFT, RIGHT, UP, DOWN}
 var current_direction : directions
 
 var is_in_range: bool = false
-var target_object : StaticBody2D
-var held_object : StaticBody2D
+var target_object : CharacterBody2D
+var held_object : CharacterBody2D
 
 
 @onready var hand_pos: Marker2D = $HandPos
@@ -22,7 +22,6 @@ var held_object : StaticBody2D
 
 
 func _physics_process(delta):
-	_update_zIndexis()
 	pickup_object()
 	drop_object()
 	#Input into vector
@@ -35,10 +34,26 @@ func _physics_process(delta):
 	#if character_dierection.x > 0: %sprite.flip_h = false
 	#elif character_dierection.x < 0: %sprite.flip_h = true
 	
-	_update_current_direction()
+	if character_dierection.x > 0:
+		current_direction = directions.RIGHT
+	elif character_dierection.x < 0:
+		current_direction = directions.LEFT
+	elif character_dierection.x == 0:
+		if character_dierection.y < 0:
+			current_direction = directions.UP
+		if character_dierection.y > 0:
+			current_direction = directions.DOWN
 	
 	# modify hand position
-	_set_hand_position()
+	match current_direction:
+			directions.LEFT:
+				hand_pos.position = Vector2.LEFT * holding_distance
+			directions.RIGHT:
+				hand_pos.position = Vector2.RIGHT * holding_distance
+			directions.UP:
+				hand_pos.position = Vector2.UP * holding_distance
+			directions.DOWN:
+				hand_pos.position = Vector2.DOWN * holding_distance
 	
 	if character_dierection:
 		velocity = character_dierection * movment_speed
@@ -54,77 +69,33 @@ func pickup_object() -> void :
 			held_object = target_object
 			held_object.reparent(hand_pos)
 			held_object.position = Vector2.ZERO
-			held_object.collision_layer = 2
 
 func drop_object() -> void :
 	if Input.is_action_just_pressed(\"drop\") and held_object:
 		held_object.reparent(get_parent())
 		_changeHeldObjectPosition()
-		held_object.collision_layer = 1
-		_reset_zIndexis()
 		held_object = null
 
 func _changeHeldObjectPosition() -> void:
-	_update_Node2D_pos(held_object)
+	match current_direction:
+			directions.LEFT:
+				held_object.position = position + Vector2.LEFT * holding_distance
+			directions.RIGHT:
+				held_object.position = position + Vector2.RIGHT * holding_distance
+			directions.UP:
+				held_object.position = position + Vector2.UP * holding_distance
+			directions.DOWN:
+				held_object.position = position + Vector2.DOWN * holding_distance
 
-func _on_pickup_range_body_entered(body: Node2D) -> void:
-	if body.has_node(\"PickableComponent\"):
+func _on_pickup_range_body_entered(body: Node) -> void:
+	if body.has_node(\"res://scenes/pickable_component.tscn\"):
 		is_in_range = true;
 		target_object = body;
 
-func _on_pickup_range_body_exited(body: Node2D) -> void:
-	if body.has_node(\"PickableComponent\"):
+func _on_pickup_range_body_exited(body: Node) -> void:
+	if body.has_node(\"res://scenes/pickable_component.tscn\"):
 		is_in_range = false;
 		target_object = null;
-
-func _update_current_direction() -> void:
-	if character_dierection.x > 0:
-		current_direction = directions.RIGHT
-	elif character_dierection.x < 0:
-		current_direction = directions.LEFT
-	elif character_dierection.x == 0:
-		if character_dierection.y < 0:
-			current_direction = directions.UP
-		if character_dierection.y > 0:
-			current_direction = directions.DOWN
-
-func _update_Node2D_pos(body:Node2D)->void:
-	match current_direction:
-		directions.LEFT:
-			body.position = position + Vector2.LEFT * holding_distance
-		directions.RIGHT:
-			body.position = position + Vector2.RIGHT * holding_distance
-		directions.UP:
-			body.position = position + Vector2.UP * holding_distance
-		directions.DOWN:
-			body.position = position + Vector2.DOWN * holding_distance
-
-func _set_hand_position()->void:
-	match current_direction:
-		directions.LEFT:
-			hand_pos.position = Vector2.LEFT * holding_distance
-		directions.RIGHT:
-			hand_pos.position = Vector2.RIGHT * holding_distance
-		directions.UP:
-			hand_pos.position = Vector2.UP * holding_distance
-		directions.DOWN:
-			hand_pos.position = Vector2.DOWN * holding_distance
-
-func _update_zIndexis()->void:
-	match current_direction:
-		directions.UP:
-			if held_object:
-				held_object.z_index = -1
-		directions.DOWN:
-			if held_object:
-				held_object.z_index = 1
-		_:
-			if held_object:
-				held_object.z_index = 0
-
-func _reset_zIndexis() ->void:
-	if held_object:
-		held_object.z_index = 1
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
@@ -134,10 +105,8 @@ size = Vector2(14, 28)
 radius = 36.0
 
 [node name="Player" type="CharacterBody2D"]
-z_index = 5
 motion_mode = 1
 script = SubResource("GDScript_g2els")
-holding_distance = 20.0
 
 [node name="charSprite" type="Sprite2D" parent="."]
 position = Vector2(0, -1.90735e-06)

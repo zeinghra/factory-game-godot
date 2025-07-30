@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://crx67ufyuomlc"]
+
+[ext_resource type="Script" uid="uid://d23xleiu7ulx5" path="res://scripts/movable_by_conveyor.gd" id="1_7urrp"]
+
+[node name="MovableByConveyor" type="Node"]
+script = ExtResource("1_7urrp")

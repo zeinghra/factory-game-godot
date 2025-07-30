@@ -68,7 +68,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_et2lr"]
-size = Vector2(32, 22)
+size = Vector2(31, 20)
 
 [node name="ConveyerBlockLeft" type="Node2D"]
 script = ExtResource("1_vps6h")
@@ -77,11 +77,10 @@ script = ExtResource("1_vps6h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StaticBody2D"]
 texture_filter = 1
-position = Vector2(6, 4.5)
 sprite_frames = SubResource("SpriteFrames_21idk")
 frame_progress = 0.730208
 speed_scale = 0.185
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(7, 2)
+position = Vector2(0.5, -3)
 shape = SubResource("RectangleShape2D_et2lr")

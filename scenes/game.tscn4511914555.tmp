@@ -67,13 +67,13 @@ tile_set = SubResource("TileSet_iywne")
 position = Vector2(485, -122)
 
 [node name="Conveyer2" parent="Conveyer4" instance=ExtResource("7_vtaks")]
-position = Vector2(450, -121)
+position = Vector2(453, -122)
 
 [node name="Conveyer3" parent="Conveyer4" instance=ExtResource("7_vtaks")]
-position = Vector2(414, -122)
+position = Vector2(421, -122)
 
 [node name="ConveyerBlockLeft" parent="Conveyer4" instance=ExtResource("9_dinhu")]
-position = Vector2(371, -124)
+position = Vector2(389, -122)
 
 [node name="Walls" type="Node" parent="."]
 

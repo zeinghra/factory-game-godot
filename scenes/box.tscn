@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnmftretqphid"]
+
+[ext_resource type="PackedScene" uid="uid://dj4moggnu26pd" path="res://scenes/pickable_component.tscn" id="1_c2ln5"]
+[ext_resource type="PackedScene" uid="uid://crx67ufyuomlc" path="res://scenes/movable_by_conveyor.tscn" id="2_telwu"]
+[ext_resource type="Texture2D" uid="uid://5t1qrt5h0gcd" path="res://Assets/Boxes/cardboardbox1.png" id="3_brpd5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ry43h"]
+size = Vector2(20, 24)
+
+[node name="Box" type="StaticBody2D"]
+z_index = 1
+scale = Vector2(0.7, 0.7)
+
+[node name="PickableComponent" parent="." instance=ExtResource("1_c2ln5")]
+
+[node name="MovableByConveyor" parent="." instance=ExtResource("2_telwu")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_brpd5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ry43h")

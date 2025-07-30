@@ -82,8 +82,12 @@ frame_progress = 0.127181
 speed_scale = 0.255
 
 [node name="ConveyerArea" type="Area2D" parent="."]
+collision_mask = 3
 script = ExtResource("3_p3mjr")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ConveyerArea"]
 position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_et2lr")
+
+[connection signal="body_entered" from="ConveyerArea" to="ConveyerArea" method="_on_body_entered"]
+[connection signal="body_exited" from="ConveyerArea" to="ConveyerArea" method="_on_body_exited"]
