@@ -1,0 +1,121 @@
+[gd_scene load_steps=5 format=3 uid="uid://jiogcr63af3e"]
+
+[ext_resource type="Texture2D" uid="uid://duw4dacvubpjx" path="res://icon.svg" id="1_2jmuu"]
+
+[sub_resource type="GDScript" id="GDScript_g2els"]
+script/source = "extends CharacterBody2D
+
+@export var movment_speed : float = 250
+var character_dierection : Vector2
+
+enum directions {LEFT, RIGHT, UP, DOWN}
+var current_direction : directions
+
+var is_in_range: bool = false
+var target_object : CharacterBody2D
+var held_object : CharacterBody2D
+
+@onready var hand_pos: Marker2D = $HandPos
+
+
+func _physics_process(delta):
+	pickup_object()
+	drop_object()
+	#Input into vector
+	character_dierection.x = Input.get_axis(\"moveLeft\",\"moveRight\")
+	character_dierection.y = Input.get_axis(\"moveUp\",\"moveDown\")
+	#Make diagonla speed equal to dierectional speed
+	character_dierection = character_dierection.normalized()
+	
+	#Flip
+	#if character_dierection.x > 0: %sprite.flip_h = false
+	#elif character_dierection.x < 0: %sprite.flip_h = true
+	
+	if character_dierection.x > 0:
+		current_direction = directions.RIGHT
+		print(\"Right\")
+	elif character_dierection.x < 0:
+		current_direction = directions.LEFT
+		print(\"LEFT\")
+	elif character_dierection.x == 0:
+		if character_dierection.y > 0:
+			current_direction = directions.UP
+			print(\"UP\")
+		if character_dierection.y < 0:
+			current_direction = directions.DOWN
+			print(\"DOWN\")
+		
+	
+	if character_dierection:
+		velocity = character_dierection * movment_speed
+		#if %charSprite.animation != \"Walking\": %charSprite.animation = \"Walking\"
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, movment_speed)
+		#if %charSprite.animation != \"Idel\": %charSprite.animation = \"Idel\"
+	move_and_slide()
+
+func pickup_object() -> void :
+	if is_in_range:
+		if Input.is_action_just_pressed(\"pickup\") and !held_object:
+			held_object = target_object
+			held_object.reparent(hand_pos)
+			held_object.position = hand_pos.position
+
+func drop_object() -> void :
+	if Input.is_action_just_pressed(\"drop\") and held_object:
+		held_object.reparent(get_parent())
+		match current_direction:
+			directions.LEFT:
+				held_object.position = position + Vector2.LEFT * 20
+			directions.RIGHT:
+				held_object.position = position + Vector2.RIGHT * 20
+			directions.UP:
+				held_object.position = position + Vector2.UP * 20
+			directions.DOWN:
+				held_object.position = position + Vector2.DOWN * 20
+		
+
+
+func _on_pickup_range_body_entered(body: Node2D) -> void:
+	if body is Pickable:
+		is_in_range = true;
+		target_object = body;
+
+
+func _on_pickup_range_body_exited(body: Node2D) -> void:
+	if body is Pickable:
+		is_in_range = false;
+		target_object = null;
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
+size = Vector2(14, 28)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2jmuu"]
+radius = 36.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+motion_mode = 1
+script = SubResource("GDScript_g2els")
+
+[node name="charSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -1.90735e-06)
+scale = Vector2(0.140625, 0.257813)
+texture = ExtResource("1_2jmuu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_qhqgy")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[node name="PickupRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="PickupRange"]
+shape = SubResource("CircleShape2D_2jmuu")
+
+[node name="HandPos" type="Marker2D" parent="."]
+position = Vector2(0, -26)
+
+[connection signal="body_entered" from="PickupRange" to="." method="_on_pickup_range_body_entered"]
+[connection signal="body_exited" from="PickupRange" to="." method="_on_pickup_range_body_exited"]

@@ -1,0 +1,87 @@
+[gd_scene load_steps=13 format=3 uid="uid://btup23d48n0wn"]
+
+[ext_resource type="Script" uid="uid://clgtmuwo4vl2a" path="res://scripts/conveyer_block_left.gd" id="1_vps6h"]
+[ext_resource type="Texture2D" uid="uid://dc33rn1crntv6" path="res://Assets/Objects/conveyer-Sheet2.png" id="2_efifj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vps6h"]
+atlas = ExtResource("2_efifj")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efifj"]
+atlas = ExtResource("2_efifj")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wc3t"]
+atlas = ExtResource("2_efifj")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00kxa"]
+atlas = ExtResource("2_efifj")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ndru"]
+atlas = ExtResource("2_efifj")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ohmn"]
+atlas = ExtResource("2_efifj")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yeeu3"]
+atlas = ExtResource("2_efifj")
+region = Rect2(192, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_612il"]
+atlas = ExtResource("2_efifj")
+region = Rect2(224, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_21idk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vps6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_efifj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wc3t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_00kxa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ndru")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ohmn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yeeu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_612il")
+}],
+"loop": true,
+"name": &"default",
+"speed": 60.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_et2lr"]
+size = Vector2(32, 22)
+
+[node name="ConveyerBlockLeft" type="Node2D"]
+script = ExtResource("1_vps6h")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StaticBody2D"]
+texture_filter = 1
+position = Vector2(6, 4.5)
+sprite_frames = SubResource("SpriteFrames_21idk")
+frame_progress = 0.730208
+speed_scale = 0.185
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(7, 2)
+shape = SubResource("RectangleShape2D_et2lr")
